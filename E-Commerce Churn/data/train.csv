@@ -1,0 +1,11 @@
+CustomerID,Age,Membership,Purchase_Count,Spend,Churn
+1001,34,Gold,12,340.5,0
+1002,22,Silver,3,85.2,1
+1003,,Gold,8,210.0,0
+1004,45,Bronze,2,45.0,1
+1005,28,Silver,,150.7,0
+1006,52,Gold,15,520.0,0
+1007,,Bronze,1,25.0,1
+1008,31,Silver,6,180.9,0
+1009,24,Bronze,,65.0,1
+1010,40,Gold,10,310.4,0

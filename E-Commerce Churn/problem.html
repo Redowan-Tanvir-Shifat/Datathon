@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Commerce Churn Datathon Practice Lab</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f7f6;
+        }
+
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #16a085;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+
+        p.subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+
+        .section-title {
+            background-color: #2c3e50;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 4px;
+            margin-top: 30px;
+            font-size: 1.25rem;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+            border-left: 5px solid #3498db;
+        }
+
+        .card.csv-box {
+            border-left-color: #e74c3c;
+        }
+
+        pre {
+            background: #1e1e1e;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin-top: 10px;
+            border: 1px solid #2d2d2d;
+        }
+
+        code {
+            font-family: 'Consolas', 'Fira Code', monospace;
+            font-size: 0.95rem;
+            color: #d4d4d4;
+        }
+
+        /* VS Code Dark Modern Syntax Color Overrides */
+        .c-keyword {
+            color: #569cd6;
+        }
+
+        .c-string {
+            color: #ce9178;
+        }
+
+        .c-builtin {
+            color: #4ec9b0;
+        }
+
+        .c-func {
+            color: #dcdcaa;
+        }
+
+        .c-comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+
+        .c-num {
+            color: #b5cea8;
+        }
+
+        .solution-btn {
+            background-color: #16a085;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .solution-btn:hover {
+            background-color: #117a65;
+        }
+
+        .solution-content {
+            display: none;
+            margin-top: 15px;
+            border-top: 1px dashed #ccc;
+            padding-top: 15px;
+        }
+    </style>
+    <script>
+        function toggleSolution(id) {
+            var x = document.getElementById(id);
+            if (x.style.display === "none" || x.style.display === "") {
+                x.style.display = "block";
+            } else {
+                x.style.display = "none";
+            }
+        }
+    </script>
+</head>
+
+<body>
+
+    <h1>E-Commerce Customer Churn Datathon</h1>
+    <p class="subtitle">An end-to-end sandbox problem layout utilizing raw text CSV streams.</p>
+
+    <div class="section-title">The Datathon Dataset Files</div>
+    <p style="margin-top: 10px;">Copy the raw text blocks below, save them into your workspace files as
+        <code>train.csv</code>, <code>test.csv</code>, and <code>sample_submission.csv</code> respectively, then
+        practice building your script pipeline around them.</p>
+
+    <div class="card csv-box">
+        <h3>1. train.csv</h3>
+        <pre><code>CustomerID,Age,Membership,Purchase_Count,Spend,Churn
+1001,34,Gold,12,340.5,0
+1002,22,Silver,3,85.2,1
+1003,,Gold,8,210.0,0
+1004,45,Bronze,2,45.0,1
+1005,28,Silver,,150.7,0
+1006,52,Gold,15,520.0,0
+1007,,Bronze,1,25.0,1
+1008,31,Silver,6,180.9,0
+1009,24,Bronze,,65.0,1
+1010,40,Gold,10,310.4,0</code></pre>
+    </div>
+
+    <div class="card csv-box">
+        <h3>2. test.csv</h3>
+        <pre><code>CustomerID,Age,Membership,Purchase_Count,Spend
+1011,29,Silver,5,135.0
+1012,41,Gold,11,325.5
+1013,,Bronze,2,55.0
+1014,35,Gold,,280.0</code></pre>
+    </div>
+
+    <div class="card csv-box">
+        <h3>3. sample_submission.csv</h3>
+        <pre><code>CustomerID,Churn
+1011,0
+1012,0
+1013,0
+1014,0</code></pre>
+    </div>
+
+    <div class="section-title">End-to-End Objective Workout Tasks</div>
+
+    <div class="card">
+        <h3>Task 1: Read the localized train and test files from disk via pandas.</h3>
+        <button class="solution-btn" onclick="toggleSolution('t1')">Show Solution Code</button>
+        <div id="t1" class="solution-content">
+            <pre><code><span class="c-keyword">import</span> pandas <span class="c-keyword">as</span> pd
+train_df = pd.<span class="c-func">read_csv</span>(<span class="c-string">'train.csv'</span>)
+test_df = pd.<span class="c-func">read_csv</span>(<span class="c-string">'test.csv'</span>)</code></pre>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>Task 2: Locate all columns missing data slots.</h3>
+        <button class="solution-btn" onclick="toggleSolution('t2')">Show Solution Code</button>
+        <div id="t2" class="solution-content">
+            <pre><code><span class="c-builtin">print</span>(train_df.<span class="c-func">isnull</span>().<span class="c-func">sum</span>())</code></pre>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>Task 3: Apply the training median to fill empty numeric cells across both frames.</h3>
+        <button class="solution-btn" onclick="toggleSolution('t3')">Show Solution Code</button>
+        <div id="t3" class="solution-content">
+            <pre><code><span class="c-keyword">for</span> col <span class="c-keyword">in</span> [<span class="c-string">'Age'</span>, <span class="c-string">'Purchase_Count'</span>]:
+    fill_value = train_df[col].<span class="c-func">median</span>()
+    train_df[col] = train_df[col].<span class="c-func">fillna</span>(fill_value)
+    test_df[col] = test_df[col].<span class="c-func">fillna</span>(fill_value)</code></pre>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>Task 4: Code an engineered interaction value tracking average purchase cost.</h3>
+        <button class="solution-btn" onclick="toggleSolution('t4')">Show Solution Code</button>
+        <div id="t4" class="solution-content">
+            <pre><code>train_df[<span class="c-string">'Cost_Per_Item'</span>] = train_df[<span class="c-string">'Spend'</span>] / train_df[<span class="c-string">'Purchase_Count'</span>]
+test_df[<span class="c-string">'Cost_Per_Item'</span>] = test_df[<span class="c-string">'Spend'</span>] / test_df[<span class="c-string">'Purchase_Count'</span>]</code></pre>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>Task 5: Map text rankings into logical ordering values (Bronze=1, Silver=2, Gold=3).</h3>
+        <button class="solution-btn" onclick="toggleSolution('t5')">Show Solution Code</button>
+        <div id="t5" class="solution-content">
+            <pre><code>rank_map = {<span class="c-string">'Bronze'</span>: <span class="c-num">1</span>, <span class="c-string">'Silver'</span>: <span class="c-num">2</span>, <span class="c-string">'Gold'</span>: <span class="c-num">3</span>}
+train_df[<span class="c-string">'Membership'</span>] = train_df[<span class="c-string">'Membership'</span>].<span class="c-func">map</span>(rank_map)
+test_df[<span class="c-string">'Membership'</span>] = test_df[<span class="c-string">'Membership'</span>].<span class="c-func">map</span>(rank_map)</code></pre>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>Task 6: Clean up the data matrices by removing non-predictive tracking ID features.</h3>
+        <button class="solution-btn" onclick="toggleSolution('t6')">Show Solution Code</button>
+        <div id="t6" class="solution-content">
+            <pre><code>X = train_df.<span class="c-func">drop</span>(columns=[<span class="c-string">'CustomerID'</span>, <span class="c-string">'Churn'</span>])
+y = train_df[<span class="c-string">'Churn'</span>]
+X_test = test_df.<span class="c-func">drop</span>(columns=[<span class="c-string">'CustomerID'</span>])</code></pre>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>Task 7: Split your development rows to create a holdout validation block.</h3>
+        <button class="solution-btn" onclick="toggleSolution('t7')">Show Solution Code</button>
+        <div id="t7" class="solution-content">
+            <pre><code><span class="c-keyword">from</span> sklearn.model_selection <span class="c-keyword">import</span> <span class="c-builtin">train_test_split</span>
+X_train, X_val, y_train, y_val = <span class="c-func">train_test_split</span>(X, y, test_size=<span class="c-num">0.2</span>, random_state=<span class="c-num">42</span>)</code></pre>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>Task 8: Train an XGBoost classification architecture using your metrics.</h3>
+        <button class="solution-btn" onclick="toggleSolution('t8')">Show Solution Code</button>
+        <div id="t8" class="solution-content">
+            <pre><code><span class="c-keyword">from</span> xgboost <span class="c-keyword">import</span> <span class="c-builtin">XGBClassifier</span>
+model = <span class="c-builtin">XGBClassifier</span>(n_estimators=<span class="c-num">100</span>, random_state=<span class="c-num">42</span>)
+model.<span class="c-func">fit</span>(X_train, y_train)</code></pre>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>Task 9: Evaluate model accuracy using your internal validation data split.</h3>
+        <button class="solution-btn" onclick="toggleSolution('t9')">Show Solution Code</button>
+        <div id="t9" class="solution-content">
+            <pre><code><span class="c-keyword">from</span> sklearn.metrics <span class="c-keyword">import</span> <span class="c-func">accuracy_score</span>
+val_preds = model.<span class="c-func">predict</span>(X_val)
+<span class="c-builtin">print</span>(<span class="c-func">accuracy_score</span>(y_val, val_preds))</code></pre>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>Task 10: Process your test arrays and write the target fields into a formatted submission CSV file.</h3>
+        <button class="solution-btn" onclick="toggleSolution('t10')">Show Solution Code</button>
+        <div id="t10" class="solution-content">
+            <pre><code>sub = pd.<span class="c-func">read_csv</span>(<span class="c-string">'sample_submission.csv'</span>)
+sub[<span class="c-string">'Churn'</span>] = model.<span class="c-func">predict</span>(X_test)
+sub.<span class="c-func">to_csv</span>(<span class="c-string">'my_submission.csv'</span>, index=<span class="c-keyword">False</span>)</code></pre>
+        </div>
+    </div>
+
+</body>
+
+</html>

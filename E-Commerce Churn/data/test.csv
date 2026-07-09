@@ -1,0 +1,5 @@
+CustomerID,Age,Membership,Purchase_Count,Spend
+1011,29,Silver,5,135.0
+1012,41,Gold,11,325.5
+1013,,Bronze,2,55.0
+1014,35,Gold,,280.0
